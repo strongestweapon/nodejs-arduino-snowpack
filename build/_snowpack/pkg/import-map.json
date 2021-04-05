@@ -1,0 +1,7 @@
+{
+  "imports": {
+    "canvas-confetti": "./canvas-confetti.js",
+    "socket.io-client": "./socket.io-client.js",
+    "three": "./three.js"
+  }
+}

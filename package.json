@@ -1,0 +1,33 @@
+{
+  "name": "nodejs-arduino-snowpack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "snowpack dev",
+    "build": "snowpack build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/strongestweapon/nodejs-arduino-snowpack.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/strongestweapon/nodejs-arduino-snowpack/issues"
+  },
+  "homepage": "https://github.com/strongestweapon/nodejs-arduino-snowpack#readme",
+  "devDependencies": {
+    "snowpack": "^3.2.2"
+  },
+  "dependencies": {
+    "canvas-confetti": "^1.4.0",
+    "express": "^4.17.1",
+    "http": "0.0.1-security",
+    "serialport": "^9.0.7",
+    "socket.io": "^4.0.1",
+    "socket.io-client": "^4.0.1",
+    "three": "^0.127.0"
+  }
+}

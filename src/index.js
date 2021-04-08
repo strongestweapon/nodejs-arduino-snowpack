@@ -3,7 +3,6 @@ import confetti from 'canvas-confetti'
 import io from "socket.io-client"
 import * as THREE from 'three';
 
-
 const socket = io()
 
 helloWorld()
@@ -28,9 +27,69 @@ function map_range(value, low1, high1, low2, high2) {
     return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
 }
 
+// Scene
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize( window.innerWidth, window.innerHeight );
-document.body.appendChild( renderer.domElement );
+// Object
+const geometry = new THREE.BoxGeometry(1, 1, 1)
+const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
+const mesh = new THREE.Mesh(geometry, material)
+scene.add(mesh)
+
+
+// Sizes
+const sizes = {
+  width: window.innerWidth,
+  height: window.innerHeight
+}
+
+window.addEventListener('resize', () =>
+{
+    // Update sizes
+    sizes.width = window.innerWidth
+    sizes.height = window.innerHeight
+
+    // Update camera
+    camera.aspect = sizes.width / sizes.height
+    camera.updateProjectionMatrix()
+
+    // Update renderer
+    renderer.setSize(sizes.width, sizes.height)
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+})
+
+window.addEventListener('dblclick', () =>
+{
+    console.log('double click')
+})
+
+// Camera
+const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height)
+camera.position.z = 3
+scene.add(camera)
+
+
+// Renderer
+const renderer = new THREE.WebGLRenderer({
+  canvas: document.querySelector('canvas.webgl')
+})
+
+renderer.setSize(sizes.width, sizes.height)
+
+/**
+ * Animate
+ */
+ const tick = () =>
+ {
+    //console.log('tick')
+     // Update objects
+     mesh.rotation.y += 0.01
+ 
+     // Render
+     renderer.render(scene, camera)
+ 
+     // Call tick again on the next frame
+     window.requestAnimationFrame(tick)
+ }
+ 
+ tick()

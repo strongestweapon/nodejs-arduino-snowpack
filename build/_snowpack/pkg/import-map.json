@@ -1,7 +1,0 @@
-{
-  "imports": {
-    "socket.io-client": "./socket.io-client.js",
-    "three": "./three.js",
-    "three/examples/jsm/loaders/GLTFLoader.js": "./three/examples/jsm/loaders/GLTFLoader.js"
-  }
-}

@@ -1,40 +1,50 @@
 import {helloWorld} from './hello-world.js'
-import confetti from './_snowpack/pkg/canvas-confetti.js'
 import io from "./_snowpack/pkg/socket.io-client.js"
 import * as THREE from './_snowpack/pkg/three.js';
+import { GLTFLoader } from './_snowpack/pkg/three/examples/jsm/loaders/GLTFLoader.js';
 
 const socket = io()
+let rotation = 0.0
 
 helloWorld()
 
-confetti.create(document.getElementById('canvas'), {
-  resize: true,
-  useWorker: true,
- })({ particleCount: 200, spread: 200 })
- 
-
-socket.on("currentcolor", function (data) {
-    if (data) {
-      let redVal = Math.floor(map_range(parseInt(data),0,1023,0,255))
-      document.body.style.backgroundColor =  `rgb(${redVal},0,0)`
-      console.log("background color to: "+ redVal +", 0, 0");
-    } else {
-      console.log("error!");
-    }
+socket.on("rotation", function (data) {
+  if (data) {
+    rotation = data;
+  } else {
+    console.log("error!");
+  }
 })
 
-function map_range(value, low1, high1, low2, high2) {
-    return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
-}
+// Canvas
+const canvas = document.querySelector('canvas.webgl')
 
 // Scene
 const scene = new THREE.Scene();
+const loader = new GLTFLoader();
+
+let model
+
+loader.load( 'models/Duck.gltf', function ( gltf ) {
+
+    model = gltf.scene
+    model.position.y = -0.5
+	scene.add( model );
+
+}, undefined, function ( error ) {
+
+	console.error( error );
+
+} );
+
+const ambientLight = new THREE.AmbientLight(0xffffff, 1)
+scene.add(ambientLight)
 
 // Object
 const geometry = new THREE.BoxGeometry(1, 1, 1)
 const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
 const mesh = new THREE.Mesh(geometry, material)
-scene.add(mesh)
+//scene.add(mesh)
 
 
 // Sizes
@@ -60,7 +70,30 @@ window.addEventListener('resize', () =>
 
 window.addEventListener('dblclick', () =>
 {
-    console.log('double click')
+    const fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement
+
+    if(!fullscreenElement)
+    {
+        if(canvas.requestFullscreen)
+        {
+            canvas.requestFullscreen()
+        }
+        else if(canvas.webkitRequestFullscreen)
+        {
+            canvas.webkitRequestFullscreen()
+        }
+    }
+    else
+    {
+        if(document.exitFullscreen)
+        {
+            document.exitFullscreen()
+        }
+        else if(document.webkitExitFullscreen)
+        {
+            document.webkitExitFullscreen()
+        }
+    }
 })
 
 // Camera
@@ -83,7 +116,8 @@ renderer.setSize(sizes.width, sizes.height)
  {
     //console.log('tick')
      // Update objects
-     mesh.rotation.y += 0.01
+     //mesh.rotation.y = rotation
+     if (model) model.rotation.y = rotation * 10
  
      // Render
      renderer.render(scene, camera)

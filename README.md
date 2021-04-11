@@ -33,3 +33,35 @@ node server.js
 - build 폴더안에 있는 파일을 직접 건드리지 말라.
 - 아두이노에서 시리얼 데이터가 0-1023으로 변하면 그값을 0-1로 바꾸고 3.14를 곱한값으로 큐브를 회전시킨다.
 
+## ues this arduino code
+connect potetionmeter to analogpin
+
+```
+int analogPin=1;
+int currentValue=0;
+int previousValue=0;
+
+
+void setup()
+{
+  Serial.begin(9600);
+}
+ 
+void loop() 
+{
+  previousValue = currentValue;
+  currentValue = analogRead(analogPin);
+  
+  if (previousValue != currentValue) {
+    
+    int difference = abs(previousValue - currentValue);
+    
+    if(difference > 10){
+    
+    Serial.println(currentValue);
+
+    }
+ }
+ delay(100);
+}
+```

@@ -21,7 +21,6 @@
     "snowpack": "^3.2.2"
   },
   "dependencies": {
-    "canvas-confetti": "^1.4.0",
     "express": "^4.17.1",
     "http": "0.0.1-security",
     "serialport": "^9.0.7",
